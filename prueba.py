@@ -19,20 +19,20 @@ class Reserva:
 
 def mostrar_habitaciones_disponibles(habitaciones):
     print("Habitaciones disponibles:")
-    for h in habitaciones:
-        if h.disponible:
-            print(f"Número: {h.numero}, Tipo: {h.tipo}, Precio por noche: {h.precio_noche}")
+    for habitacion in habitaciones:
+        if habitacion.disponible:
+            print(f"Número: {habitacion.numero}, Tipo: {habitacion.tipo}, Precio por noche: {habitacion.precio_noche}")
 
 def hacer_reserva(habitaciones, numero, cliente, noches):
-    for h in habitaciones:
-        if h.numero == numero and h.disponible:
+    for habitacion in habitaciones:
+        if habitacion.numero == numero and habitacion.disponible:
             if noches <= 0:
                 print("La cantidad de noches debe ser mayor a cero.")
                 return
-            h.disponible = False
-            reserva = Reserva(h, cliente, noches)
+            habitacion.disponible = False
+            reserva = Reserva(habitacion, cliente, noches)
             print(f"Reserva realizada para {cliente.nombre} {cliente.apellido}.")
-            print(f"Habitación {h.numero} por {noches} noches.")
+            print(f"Habitación {habitacion.numero} por {noches} noches.")
             return
     print("Habitación no disponible o número incorrecto.")
 
