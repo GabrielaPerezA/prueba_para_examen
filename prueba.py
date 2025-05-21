@@ -1,79 +1,61 @@
-# Sistema de venta de billetes de avión
+class Habitacion:
+    def __init__(self, numero, tipo, precio_noche, disponible):
+        self.numero = numero
+        self.tipo = tipo
+        self.precio_noche = precio_noche
+        self.disponible = disponible
 
-class Vuelo:
-    def __init__(self, numero_vuelo, origen, destino, fecha, salida, llegada, precio):
-        self.numero_vuelo = numero_vuelo
-        self.origen = origen
-        self.destino = destino
-        self.fecha = fecha
-        self.salida = salida
-        self.llegada = llegada
-        self.precio = precio
-
-class Pasajero:
-    def __init__(self, nombre, apellido, edad, telefono, correo):
+class Cliente:
+    def __init__(self, nombre, apellido, dni):
         self.nombre = nombre
         self.apellido = apellido
-        self.edad = edad
-        self.telefono = telefono
-        self.correo = correo
+        self.dni = dni
 
-class Informacion:
-    def __init__(self, vuelo, pasajero, asientos):
-        self.vuelo = vuelo
-        self.pasajero = pasajero
-        self.asientos = asientos
+class Reserva:
+    def __init__(self, habitacion, cliente, noches):
+        self.habitacion = habitacion
+        self.cliente = cliente
+        self.noches = noches
 
-def mostrar_vuelos_disponibles(vuelos):
-    print("Vuelos disponibles:")
-    for vuelo in vuelos:
-        print(f"Número de vuelo: {vuelo.numero_vuelo}, Origen: {vuelo.origen}, Destino: {vuelo.destino}, Fecha: {vuelo.fecha}, Hora de salida: {vuelo.salida}, Hora de llegada: {vuelo.llegada}, Precio: {vuelo.precio}")
+def mostrar_habitaciones_disponibles(habitaciones):
+    print("Habitaciones disponibles:")
+    for h in habitaciones:
+        if h.disponible:
+            print(f"Número: {h.numero}, Tipo: {h.tipo}, Precio por noche: {h.precio_noche}")
 
-def reservar_vuelo(lista, numero_vuelo, pasajero, cantidad):
-    
-    for vuelo in lista:
-        if vuelo.numero_vuelo == numero_vuelo:
-            if cantidad <= 0:
-                print("La cantidad de asientos debe ser mayor que cero.")
+def hacer_reserva(habitaciones, numero, cliente, noches):
+    for h in habitaciones:
+        if h.numero == numero and h.disponible:
+            if noches <= 0:
+                print("La cantidad de noches debe ser mayor a cero.")
                 return
-            elif cantidad > 10:
-                print("Lo sentimos, no se pueden reservar más de 10 asientos por reserva.")
-                return
-            elif cantidad > 0 and cantidad <= 10:
-                reserva = Informacion(vuelo, pasajero, cantidad)
-                print(f"¡Reserva exitosa para el vuelo {vuelo.numero_vuelo}!")
-                print(f"Nombre del pasajero: {pasajero.nombre} {pasajero.apellido}, Asientos reservados: {cantidad}")
-                return
-    print("No se encontró ningún vuelo con el número especificado.")
-
+            h.disponible = False
+            reserva = Reserva(h, cliente, noches)
+            print(f"Reserva realizada para {cliente.nombre} {cliente.apellido}.")
+            print(f"Habitación {h.numero} por {noches} noches.")
+            return
+    print("Habitación no disponible o número incorrecto.")
 
 def main():
-    vuelos = [
-        Vuelo("AA123", "Nueva York", "Los Angeles", "2024-05-15", "08:00", "11:00", 250.00),
-        Vuelo("AA456", "Los Angeles", "Chicago", "2024-05-20", "10:00", "13:00", 200.00),
-        Vuelo("AA789", "Chicago", "Miami", "2024-05-25", "12:00", "15:00", 300.00)
+    habitaciones = [
+        Habitacion(101, "Individual", 50, True),
+        Habitacion(102, "Doble", 80, True),
+        Habitacion(201, "Suite", 120, True)
     ]
 
-    print("Bienvenido al sistema de venta de billetes de avión.")
-    opcion = input("Seleccione una opción:\n1. Ver vuelos disponibles\n2. Reservar vuelo\nIngrese su opción: ")
+    opcion = input("1. Ver habitaciones disponibles\n2. Reservar habitación\nSeleccione una opción: ")
 
     if opcion == '1':
-        mostrar_vuelos_disponibles(vuelos)
+        mostrar_habitaciones_disponibles(habitaciones)
     elif opcion == '2':
-        #extraer método
-        n = input("Ingrese su nombre: ")
-        a = input("Ingrese su apellido: ")
-        e = int(input("Ingrese su edad: "))
-        t = input("Ingrese su número de teléfono: ")
-        c = input("Ingrese su correo electrónico: ")
+        n = input("Nombre: ")
+        a = input("Apellido: ")
+        dni = input("DNI: ")
+        cliente = Cliente(n, a, dni)
 
-        pasajero = Pasajero(n, a, e, t, c)
-
-        #extraer método
-        numero = input("Ingrese el número de vuelo que desea reservar: ")
-        cantidad = int(input("Ingrese la cantidad de asientos que desea reservar (máximo 10): "))
-
-        reservar_vuelo(vuelos, numero, pasajero, cantidad)
+        numero = int(input("Número de habitación: "))
+        noches = int(input("Número de noches: "))
+        hacer_reserva(habitaciones, numero, cliente, noches)
     else:
         print("Opción no válida.")
 
