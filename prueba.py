@@ -23,10 +23,15 @@ def mostrar_habitaciones_disponibles(habitaciones):
         if habitacion.disponible:
             print(f"Número: {habitacion.numero}, Tipo: {habitacion.tipo}, Precio por noche: {habitacion.precio_noche}")
 
+# EXTRAER MÉTODO: validar_noches
+# Este método servirá para comprobar si el número de noches es válido
+def validar_noches(noches):
+    return noches > 0
+
 def hacer_reserva(habitaciones, numero, cliente, noches):
     for habitacion in habitaciones:
         if habitacion.numero == numero and habitacion.disponible:
-            if noches <= 0:
+            if not validar_noches(noches):  # USO DE LA FUNCIÓN EXTRAÍDA
                 print("La cantidad de noches debe ser mayor a cero.")
                 return
             habitacion.disponible = False
@@ -36,6 +41,26 @@ def hacer_reserva(habitaciones, numero, cliente, noches):
             return
     print("Habitación no disponible o número incorrecto.")
 
+# EXTRAER MÉTODO: mostrar_menu
+# Para dejar el main más limpio y separado
+def mostrar_menu():
+    return input("1. Ver habitaciones disponibles\n2. Reservar habitación\nSeleccione una opción: ")
+
+# EXTRAER MÉTODO: pedir_datos_cliente
+# Para reutilizarlo si se necesitan más clientes
+def pedir_datos_cliente():
+    nombre = input("Nombre: ")
+    apellido = input("Apellido: ")
+    dni = input("DNI: ")
+    return Cliente(nombre, apellido, dni)
+
+# EXTRAER MÉTODO: pedir_datos_reserva
+# Para separar la entrada de datos de reserva
+def pedir_datos_reserva():
+    numero = int(input("Número de habitación: "))
+    noches = int(input("Número de noches: "))
+    return numero, noches
+
 def main():
     habitaciones = [
         Habitacion(101, "Individual", 50, True),
@@ -43,18 +68,13 @@ def main():
         Habitacion(201, "Suite", 120, True)
     ]
 
-    opcion = input("1. Ver habitaciones disponibles\n2. Reservar habitación\nSeleccione una opción: ")
+    opcion = mostrar_menu()  # USO DEL MÉTODO EXTRAÍDO
 
     if opcion == '1':
         mostrar_habitaciones_disponibles(habitaciones)
     elif opcion == '2':
-        n = input("Nombre: ")
-        a = input("Apellido: ")
-        dni = input("DNI: ")
-        cliente = Cliente(n, a, dni)
-
-        numero = int(input("Número de habitación: "))
-        noches = int(input("Número de noches: "))
+        cliente = pedir_datos_cliente()  # USO DEL MÉTODO EXTRAÍDO
+        numero, noches = pedir_datos_reserva()  # USO DEL MÉTODO EXTRAÍDO
         hacer_reserva(habitaciones, numero, cliente, noches)
     else:
         print("Opción no válida.")
